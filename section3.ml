@@ -71,13 +71,11 @@ let color3_malin all_tt new_tt=
 
 
 (* testing if P11 is a subgraph of t *)
-(* this is done by finding a vertex in all the ttmax of length at least 5, and testing that the rest of the graph is not 3-colorable *)
-
-let containsP11 t = 
-  let tt = allttmax t |> List.filter (fun x-> List.length x >= 5) in
-  let candidates = List.fold_left (fun x y -> inter x (List.sort compare y)) (List.hd tt) tt in
-  assert(List.length candidates = 1);
-  not (color (clean (removett candidates (allttmax t))) 3)
+let containsP11 t =
+  let tt = allttmax t in
+  List.exists (fun x -> 
+      not (color (clean (removett [x] tt)) 3)
+    ) [0;1;2;3;4]
 
 
 (* auxiliary functions *)  
@@ -89,7 +87,7 @@ let rec f1ixj tournoi j=function
   |[]->[[j]]
   |h::t when List.mem j tournoi.(h) -> List.map (function l -> h::l) (f1ixj tournoi j t)
   |h::t when List.mem h tournoi.(j) -> (f1ixj tournoi j t)@(List.map (function l -> j::h::l) (f1ijx tournoi j t))
-  |_::t->f1ixj tournoi j t;;
+  |_::t->f1ixj tournoi j t
 
 let rec f1xij tournoi i j=function
   |[]->failwith "wtf"
@@ -112,18 +110,18 @@ and f2xij tournoi i j=function
   |h::t when h=j -> List.map (function l -> i::j::l)(f1ijx tournoi i t)
   |h::t when List.mem i tournoi.(h) -> List.map (function l -> h::l) (f2xij tournoi i j t)
   |h::t when List.mem h tournoi.(i) -> (f2xyij tournoi i j t)@(List.map (function l -> i::h::l)(f2ixj tournoi i j t))
-  |_::t->f2xij tournoi i j t;;
+  |_::t->f2xij tournoi i j t
 
 (* updating the list of maxtt when removing an arc *)
 let rec newttmax tournoi i j = function
   |[]->[]
   |h::t when List.mem i h -> (f1xij tournoi i j h)@(newttmax tournoi i j t)
   |h::t when List.mem j h -> (f2xij tournoi i j h)@(newttmax tournoi i j t)
-  |_::t->newttmax tournoi i j t;;
+  |_::t->newttmax tournoi i j t
 
 (* main routine for computing completions and testing them on the fly*)
 let rec test_compl digons tournoi tt = match digons with
-  |[]-> assert (containsP11 tournoi)
+  |[]-> assert (containsP11 tournoi) 
   |(a,b)::q ->
     tournoi.(a) <- b::tournoi.(a);
     let l = clean(newttmax tournoi a b tt) in
@@ -132,7 +130,7 @@ let rec test_compl digons tournoi tt = match digons with
       test_compl q tournoi all_tt;
     tournoi.(a) <- List.tl tournoi.(a);
     if a < b then
-      test_compl ((b,a)::q) tournoi tt 
+      test_compl ((b,a)::q) tournoi tt
 
 (* wrapping up to test the 4-chromatic tournaments obtained by gluing t with a tt5 *)
 let test t =
@@ -140,7 +138,6 @@ let test t =
     (List.map (fun x-> List.map (fun y-> (y,x)) [0;1;2;3;4]) [5;6;7;8;9;10;11] |> List.concat)
     (convert ([(0,1);(0,2);(0,3);(0,4);(1,2);(1,3);(1,4);(2,3);(2,4);(3,4)]@(List.map (fun (a,b) -> (a+5,b+5)) (deconvert t))) 12)
     ([0;1;2;3;4]::(List.map (List.map (fun a-> a+5)) (allttmax t)))
-    0
 
 (* if no assert is triggered, every completion contains P11 *)
 let _ =
