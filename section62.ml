@@ -169,7 +169,7 @@ let completions t8 =
   |(a,b)::q ->
     t13.(a) <- b::t13.(a);
     let l = clean(newttmax t13 a b tt) in
-    let all_tt = clean(l@tt) in (* 2TT5 free ?*)
+    let all_tt = clean(l@tt) in
     if List.for_all (fun x-> List.length x<7) l && not (has2tt5 (List.map (List.sort compare) (List.filter (fun x-> List.length x>=5) all_tt))) && not (color_malin 3 all_tt l) then
       test_compl q t13 all_tt;
     t13.(a) <- List.tl t13.(a);
@@ -305,20 +305,22 @@ let test_gluing g1 g2 =
 (* wrapping up *)
 let test index g =
   Printf.printf "------ Graph %d/%d ------\n%!" index (List.length t8_3col);
+  Printf.printf "------ Generating completions ------\n%!";
   let cg = completions g in
   Printf.printf "%d completions\n\n%!" (List.length cg);
   List.iter print cg;  
-  Printf.printf "------ Testing completions ------\n%!";
+  Printf.printf "------ Computing types ------\n%!";
   let spl = splittings (convert g 8) in
   let ct = List.sort compare (List.rev_map (fun t-> (typ t spl,t)) cg) in
   let types = doublons (List.map fst ct) in
   Printf.printf "%d types\n%!" (List.length types);
+  Printf.printf "------ Computing incompatible completions ------\n%!";
   let itypes = incomp types in
   Printf.printf "%d pairs of incompatible types\n%!" (List.length itypes); 
   let ic = recomb ct itypes in
   Printf.printf "%d pairs of incompatible completions\n%!" (List.length ic);
-  let i = ref 0 in
-  List.iter (fun (a,b) -> incr i; Printf.printf "------ Gluing %d/%d ------\n%!" !i (List.length ic); test_gluing (deconvert a) (deconvert b)) ic;
+  Printf.printf "------ Trying to orient the last 25 arcs ------\n%!";
+  List.iter (fun (a,b) -> test_gluing (deconvert a) (deconvert b)) ic;
   Printf.printf "------ DONE ------\n"
 
 
