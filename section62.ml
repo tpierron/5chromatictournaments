@@ -263,7 +263,7 @@ let rec recomb_aux ct ct2 itypes = match (ct,ct2,itypes) with
   |t1::q1,t2::q2,(a,b)::q when a > fst t1 -> assert (t1=t2); recomb_aux q1 q2 ((a,b)::q)
   |t1::q1,t2::q2,(a,b)::q when a = fst t1 && b > fst t2 -> recomb_aux (t1::q1) q2 ((a,b)::q)
   |t1::q1,t2::q2,(a,b)::q when a = fst t1 && b = fst t2 -> (snd t1,snd t2)::recomb_aux (t1::q1) q2 ((a,b)::q)
-  |t1::q1,t2::q2,(a,b)::q when a = fst t1 && b < fst t2 -> recomb_aux (t1::q1) (2::q2) q
+  |t1::q1,t2::q2,(a,b)::q when a = fst t1 && b < fst t2 -> recomb_aux (t1::q1) (t2::q2) q
   |t1::q1,_,(a,b)::q  -> recomb_aux (t1::q1) (t1::q1) q
 
 let recomb ct itypes = recomb_aux ct ct itypes
