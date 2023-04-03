@@ -1,3 +1,4 @@
+
 # 5chromatictournaments
 
 The logs are big. Install https://git-lfs.github.com/
@@ -6,11 +7,11 @@ The logs are big. Install https://git-lfs.github.com/
 
 Each .ml file can be compiled with
 
-``ocamlopt -o <file> <file.ml>''
+> ocamlopt -o <file> <file.ml>
 
 and run with
 
-``./file''
+>./file
 
 
 # Output
@@ -22,20 +23,21 @@ This program raises an exception if it finds a 4-chromatic completion of {Pal_7,
 
 This program's output matches the following shape, for each 3-chromatic TT_5-free graph B on 8 vertices:
 
------- Graph <index of graph>/94 ------
+------ Graph \<index of graph>/94 ------
 ------ Generating completions ------
-<the 13-completions of B> (one per line, given by a list of arcs)
-<number of completions> completions
+ **\<the 13-completions of B\>** (one per line, given by a list of arcs)
+**\<number of completions\>** completions
 
-<the 13-completions of B> (one per line, given by a list of arcs)
+**\<the 13-completions of B\>** (one per line, given by a list of arcs)
 ------ Computing types ------
-<number of types of the 13-completions> types
+**\<number of types of the 13-completions\>** types
 ------ Computing incompatible completions ------
-<number of> pairs of incompatible types
-<number of> pairs of incompatible completions
+**\<number of\>** pairs of incompatible types
+**\<number of\>** pairs of incompatible completions
 ------ Trying to orient the last 25 arcs ------
-<the 18-completions of B, if any>
+**\<the 18-completions of B, if any\>** (one per line, given by a list of arcs)
 ------ DONE ------
+
 
 In particular, each line "------ [Trying ...]" should be directly followed by "------ DONE ------".
 
@@ -72,8 +74,3 @@ for each pair of 8-completions (Y,Z) such that there are 13-completions of (X,Y)
 a fill phase for (Y,Z) if (Y,Z) was not considered before.
 a test phase for (X,Y,Z)
 End Graph <index of X> : <number of pairs (Y,Z)> non empty pairs, <number of> 13-completions, <number of> 18-completions
-
-
-
-
-
