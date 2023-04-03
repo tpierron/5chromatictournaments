@@ -41,7 +41,7 @@ This program's output matches the following shape, for each 3-chromatic TT_5-fre
 
 
 
-In particular, each line "------ [Trying ...]" should be directly followed by "------ DONE ------".
+In particular, each line ``------ [Trying ...]`` should be directly followed by ``------ DONE ------``.
 
 ## section63.ml
 
